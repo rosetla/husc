@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/class_students.css') }}">
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<body>
+    <h2 class="text-center">Danh sách sinh viên lớp {{ class_name }}</h2>
+
+    <!-- Hiển thị thông báo flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <section id="students">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="row">STT</th>
+                    <th scope="row">Mã sinh viên</th>
+                    <th scope="row">Họ và tên</th>
+                    <th scope="row">Lớp</th>
+                    <th scope="row">Ngày sinh</th>
+                    <th scope="row">Thành tựu</th>
+                    <th scope="row">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ student[1] }}</td>
+                    <td>{{ student[2] }}</td>
+                    <td>{{ student[3] }}</td>
+                    <td>{{ student[5] }}</td>
+                    <td>{{ student[4] }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#editModal" data-id="{{ student[1] }}" data-name="{{ student[2] }}" data-class="{{ student[3] }}" data-achievement="{{ student[4] }}">Sửa</a>
+                        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal" data-id="{{ student[1] }}" data-class="{{ class_name }}">Xóa</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Modal Sửa -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sửa thông tin sinh viên</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" method="POST" action="{{ url_for('edit_student', ma_sinh_vien='') }}">
+                        <input type="hidden" name="ma_sinh_vien" id="editStudentId">
+                        <div class="form-group">
+                            <label for="editName">Họ và tên:</label>
+                            <input type="text" class="form-control" id="editName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editClass">Lớp:</label>
+                            <input type="text" class="form-control" id="editClass" name="class_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAchievement">Thành tựu:</label>
+                            <input type="text" class="form-control" id="editAchievement" name="achievement">
+                        </div>
+                        <div class="form-group">
+                            <label for="editBirthday">Ngày sinh:</label>
+                            <input type="date" class="form-control" id="editBirthday" name="ngay_sinh">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Xóa -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xóa sinh viên</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa sinh viên có mã số <strong id="deleteStudentId"></strong> không?
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST" action="{{ url_for('delete_student') }}">
+                        <input type="hidden" name="ma_sinh_vien" id="deleteStudentIdInput">
+                        <input type="hidden" name="class_name" id="deleteClassNameInput">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
