@@ -173,4 +173,4 @@ def edit_student(ma_sinh_vien):
             return redirect(url_for('show_all_students'))
 
 if __name__ == '__main__':
-    app.run(debug=False,host='0.0.0.0')
+    app.run(debug=True)
