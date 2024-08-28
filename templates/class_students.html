@@ -24,30 +24,37 @@
     {% endwith %}
 
     <section id="students">
-        <table>
+        <table class="table table-bordered table-hover">
             <thead>
-                <tr>
-                    <th scope="row">STT</th>
-                    <th scope="row">Mã sinh viên</th>
-                    <th scope="row">Họ và tên</th>
-                    <th scope="row">Lớp</th>
-                    <th scope="row">Ngày sinh</th>
-                    <th scope="row">Thành tựu</th>
-                    <th scope="row">Chi tiết</th>
+                <tr class="table-primary">
+                    <th scope="col">STT</th>
+                    <th scope="col">Mã sinh viên</th>
+                    <th scope="col">Họ và tên</th>
+                    <th scope="col">Lớp</th>
+                    <th scope="col">Ngày sinh</th>
+                    <th scope="col">Thành tựu</th>
+                    <th scope="col">Chi tiết</th>
                 </tr>
             </thead>
             <tbody>
                 {% for student in students %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ student[1] }}</td>
-                    <td>{{ student[2] }}</td>
-                    <td>{{ student[3] }}</td>
-                    <td>{{ student[5] }}</td>
-                    <td>{{ student[4] }}</td>
+                    <td>{{ student.ma_sinh_vien }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.class_name }}</td>
+                    <td>{{ student.ngay_sinh }}</td>
+                    <td>{{ student.achievement }}</td>
                     <td>
-                        <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#editModal" data-id="{{ student[1] }}" data-name="{{ student[2] }}" data-class="{{ student[3] }}" data-achievement="{{ student[4] }}">Sửa</a>
-                        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal" data-id="{{ student[1] }}" data-class="{{ class_name }}">Xóa</a>
+                        <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#editModal"
+                           data-id="{{ student.ma_sinh_vien }}"
+                           data-name="{{ student.name }}"
+                           data-class="{{ student.class_name }}"
+                           data-achievement="{{ student.achievement }}"
+                           data-ngay_sinh="{{ student.ngay_sinh }}">Sửa</a>
+                        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal"
+                           data-id="{{ student.ma_sinh_vien }}"
+                           data-class="{{ class_name }}">Xóa</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -56,11 +63,11 @@
     </section>
 
     <!-- Modal Sửa -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Sửa thông tin sinh viên</h5>
+                    <h5 class="modal-title" id="editModalLabel">Sửa thông tin sinh viên</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -92,11 +99,11 @@
     </div>
 
     <!-- Modal Xóa -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Xóa sinh viên</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Xóa sinh viên</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -115,5 +122,4 @@
             </div>
         </div>
     </div>
-    
 {% endblock %}

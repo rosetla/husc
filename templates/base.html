@@ -10,7 +10,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #143980;" >
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #143980;">
         <a class="navbar-brand" href="/show_home">HUSC</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -20,9 +20,22 @@
             <li class="nav-item active">
               <a class="nav-link" href="#">Trang chủ <span class="sr-only">(current)</span></a>
             </li>
+            {% if session.get('logged_in') %}
             <li class="nav-item">
-              <a class="nav-link" href="#">Liên Kết</a>
+              <a class="nav-link" style="color: red;" href="{{ url_for('logout') }}">Đăng Xuất</a>
             </li>
+            {% else %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <label style="color: rgb(5, 254, 5);">Login</label>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                <a class="dropdown-item" data-toggle="modal" data-target="#registerModal">Đăng kí</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#loginModal">Đăng nhập</a>
+                <div class="dropdown-divider"></div>
+              </div>
+            </li>
+            {% endif %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Chi tiết
@@ -31,7 +44,11 @@
                 <a class="dropdown-item" href="/show_all_students">Danh sách lớp</a>
                 <a class="dropdown-item" href="/show_achievement">Danh sách sinh viên tiêu biểu</a>
                 <div class="dropdown-divider"></div>
+                {% if session.get('logged_in') %}
                 <a class="dropdown-item" href="#">Thêm...</a>
+                {% else %}
+                <a class="dropdown-item" href="#" onclick="alert('Bạn chưa đăng nhập!');">Thêm...</a>
+                {% endif %}
               </div>
             </li>
             <li class="nav-item">
@@ -44,6 +61,56 @@
           </form>
         </div>
       </nav>
+
+    <!-- Modal Đăng Nhập -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Đăng Nhập</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+              <div class="form-group">
+                <label for="loginUsername">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="loginUsername" name="username" required>
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Mật khẩu</label>
+                <input type="password" class="form-control" id="loginPassword" name="password" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Đăng Ký -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registerModalLabel">Đăng Ký</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+              <div class="form-group">
+                <label for="registerUsername">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="registerUsername" name="username" required>
+              </div>
+              <div class="form-group">
+                <label for="registerPassword">Mật khẩu</label>
+                <input type="password" class="form-control" id="registerPassword" name="password" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Đăng Ký</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <header></header>
     <main>

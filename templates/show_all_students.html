@@ -1,84 +1,125 @@
-<!-- templates/show_all_students.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<body>
-    <div class="container mt-4">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">
-            <i class="bi bi-database-add"></i> Thêm học sinh
-        </button>
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                <div class="alert-container">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar: News and Announcements -->
+        <aside class="col-md-4 pl-0">
+            <div class="card">
+                <div class="card-header text-white" style="background-color: #143980;">
+                    <h4 class="mb-0">Tin Tức & Thông Báo</h4>
                 </div>
-            {% endif %}
-        {% endwith %}
-    </div>
-    <section id="students" class="container mt-4">
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr class="table-primary text-center">
-                    <th>Lớp</th>
-                    <th>Xem chi tiết</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for class_name in classes %}
-                <tr>
-                    <td>{{ class_name }}</td>
-                    <td class="text-center">
-                        <a class="btn btn-success" href="{{ url_for('show_students_by_class', class_name=class_name) }}">
-                            <i class="bi bi-eye"></i> Xem danh sách sinh viên
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-    <!-- Modal thêm sinh viên -->
-    <div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="addStudentModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addStudentModalLabel">Thêm Sinh Viên</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Thông báo 1:</strong> Thông báo về việc đăng ký tham gia chương trình đào tạo kỹ năng "5 BÍ QUYẾT ĐỂ TRỞ THÀNH NHÂN SỰ ĐƯỢC SĂN ĐÓN TẠI CÁC CÔNG TY VÀ TẬP ĐOÀN NHẬT BẢN" tại Việt Nam và Nhật Bản.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Thông báo 2:</strong> Hạn cuối để nộp đơn đăng ký học bổng là ngày 30 tháng 8.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tin tức 1:</strong> Ngày hội việc làm sẽ diễn ra vào ngày 15 tháng 9.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tin tức 2:</strong> CLB Tin học tổ chức cuộc thi lập trình vào tháng 10.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tin tức 3:</strong> Quyết định về việc công nhận tốt nghiệp đại học hệ chính quy đợt 2 bổ sung năm 2024 (28/06/2024)
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tin tức 4:</strong> Thời khóa biểu chính thức phân kỳ 1, học kỳ 1, năm học 2024-2025
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tin tức 5:</strong> Thời khóa biểu chính thức và Danh sách lớp học phần hủy đợt 2, học kỳ 3, năm học 2023-2024
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tin tức 6:</strong> Sổ tay học vụ và thời khóa biểu dự kiến phân kỳ 2, học kỳ 1, năm học 2024-2025
+                        </li>
+                    </ul>
                 </div>
-                <form action="{{ url_for('add_student') }}" method="post">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="ma_sinh_vien">Mã Sinh Viên</label>
-                            <input type="text" class="form-control" id="ma_sinh_vien" name="ma_sinh_vien" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Tên Sinh Viên</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="class_name">Lớp</label>
-                            <input type="text" class="form-control" id="class_name" name="class_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="achievement">Thành Tích</label>
-                            <input type="text" class="form-control" id="achievement" name="achievement">
-                        </div>
-                        <div class="form-group">
-                            <label for="ngay_sinh">Ngày sinh</label>
-                            <input type="date" class="form-control" id="ngay_sinh" name="ngay_sinh">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Thêm Sinh Viên</button>
-                    </div>
-                </form>
             </div>
+        </aside>
+
+        <!-- Main content: Student Table -->
+        <div class="col-md-8">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">
+                <i class="bi bi-database-add"></i> Thêm học sinh
+            </button>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <div class="alert-container mt-4">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section id="students" class="mt-4">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr class="table-primary text-center">
+                            <th>Lớp</th>
+                            <th>Xem chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for class_name in classes %}
+                        <tr>
+                            <td>{{ class_name }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-success" href="{{ url_for('show_students_by_class', class_name=class_name) }}">
+                                    <i class="bi bi-eye"></i> Xem danh sách sinh viên
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
-</body>
+</div>
+
+<!-- Modal thêm sinh viên -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStudentModalLabel">Thêm Sinh Viên</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url_for('add_student') }}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ma_sinh_vien">Mã Sinh Viên</label>
+                        <input type="text" class="form-control" id="ma_sinh_vien" name="ma_sinh_vien" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Tên Sinh Viên</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="class_name">Lớp</label>
+                        <input type="text" class="form-control" id="class_name" name="class_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievement">Thành Tích</label>
+                        <input type="text" class="form-control" id="achievement" name="achievement">
+                    </div>
+                    <div class="form-group">
+                        <label for="ngay_sinh">Ngày sinh</label>
+                        <input type="date" class="form-control" id="ngay_sinh" name="ngay_sinh">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Thêm Sinh Viên</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
